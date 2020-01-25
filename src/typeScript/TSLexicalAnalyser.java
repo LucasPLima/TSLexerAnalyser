@@ -26,6 +26,7 @@ public class TSLexicalAnalyser {
     public ArrayList<String[]> getTokenTable() throws IOException{
         Token lexicalToken;
         while ((lexicalToken = this.lexical.yylex()) != null) {
+            System.out.println("Value:"+lexicalToken.value);
             this.tokenTable.add(new String[] {lexicalToken.name, lexicalToken.value, String.valueOf(lexicalToken.line)});
         }
         return this.tokenTable;

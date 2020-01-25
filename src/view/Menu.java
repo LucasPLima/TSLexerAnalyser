@@ -1,5 +1,7 @@
 package view;
 
+import lexicalAnalyser.Generator;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,13 +13,23 @@ public class Menu {
     private JCheckBox cbCount;
     private JButton analisarButton;
     private JLabel labAviso;
+    private String userDirLocation = System.getProperty("user.dir");
+
 
     public Menu() {
+        Generator.createLexer();
         selecionarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFileChooser fc = new JFileChooser();
-                fc.showOpenDialog(JMenu);
+
+                JFileChooser fc = new JFileChooser(userDirLocation);
+
+                int fcreturn = fc.showOpenDialog(JMenu);
+
+                if (fcreturn != JFileChooser.APPROVE_OPTION) {
+                    System.out.println("Command rejected.");
+                    return;
+                }
                 tfPath.setText(fc.getSelectedFile().getAbsolutePath());
                 tfPath.setEditable(false);
             }
@@ -28,13 +40,9 @@ public class Menu {
                 if (tfPath.getText().length()==0){
                     labAviso.setText("Selecione o arquivo para análise:");
                 }else{
-                    JFrame newFrame = new JFrame("Analisador Léxico");
                     String path = tfPath.getText();
-                    newFrame.setContentPane(new LexerOut(cbCount.isSelected(), path).pTela);
-                    newFrame.setResizable(false);
-                    newFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    newFrame.pack();
-                    newFrame.setVisible(true);
+
+                    new LexerOutputScreen(path, cbCount.isSelected()).setVisible(true);
                 }
             }
         });

@@ -20,17 +20,20 @@ private Token createToken(String name, String value) {
 
 /*IDS*/
 CHARACTERS       = [A-Za-z_]+
-NUMBERS  = [1-9][0-9]*
+NUMBERS  = [1-9][0-9]* | {NUMBERS_Z}
 NUMBERS_Z  = [0-9]*
-VALID_IDENTIFIER = ({CHARACTERS})({CHARACTERS}|{NUMBERS}|_)*
+VALID_IDENTIFIER = ({CHARACTERS})({CHARACTERS}{NUMBERS}_)*
 NUMBER_LITERAL = \"{NUMBERS_Z}\"
 
-CHAR_LITERAL = \"[a-zA-Z0-9|"#$%&'()*+,-./:;<=>!?@[\]\^_`{|}~"|\n|\t|\s]+\"
+CHARS_GENERAL  = [a-zA-Z0-9|"#$%&'()*+,-./:;<=>!?@[\]\^_`{|}~"|\n|\t|\s]+
+CHAR_LITERAL = \"{CHARS_GENERAL}\"
 
 /*DELIMITERS*/
 LINE_MARKERS = \n|\r|\t|\s
 DELIMITERS = ";" | "[" | "]" | "(" | ")" | "'" |"{" | "}" | ":" | "," |"."|"`" | "\"" | "$" | "\\"
-COMMENTS =  "//"
+LINE_COMMENTS =  "//"
+BLOCK_COMMENTS = \/\*{CHARS_GENERAL}\*\/
+COMMENTS = {BLOCK_COMMENTS}
 
 /*OPERATORS*/
 ARITHMETIC_OPERATOR = "+" | "-" | "*" | "/" | "%" | "++" | "--"
@@ -57,6 +60,7 @@ BASIC_TYPES_TITLE = "Boolean" | "Number" | "String" | "Enum" | "Any" | "Object" 
 SIMPLE_TYPES = {BASIC_TYPES} | {BASIC_TYPES_TITLE}
 
 %%
+
 {COMMENTS} {return createToken("COMMENTS", yytext());}
 {KEYWORDS} { return createToken("KEYWORD", yytext());}
 {SIMPLE_TYPES} { return createToken("TYPE", yytext()); }

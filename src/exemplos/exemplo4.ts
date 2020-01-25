@@ -13,7 +13,7 @@ if (people[1] == "Vitor") {
   console.log("Vitinho");
 }
 
-pet[0] === "Cat" ? console.log("Miau") : console.log("Au Au");
+pet[1] === "Cat" ? console.log("Miau") : console.log("Au Au");
 
 interface PersonPartial {
   name?: string;
