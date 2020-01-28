@@ -20,7 +20,7 @@ private Token createToken(String name, String value) {
 
 /*IDS*/
 CHARACTERS       = [A-Za-z_]+
-NUMBERS  = [1-9][0-9]* | {NUMBERS_Z}
+NUMBERS  = [1-9][0-9]*
 NUMBERS_Z  = [0-9]*
 VALID_IDENTIFIER = ({CHARACTERS})({CHARACTERS}{NUMBERS}_)*
 NUMBER_LITERAL = \"{NUMBERS_Z}\"
@@ -30,10 +30,11 @@ CHAR_LITERAL = \"{CHARS_GENERAL}\"
 
 /*DELIMITERS*/
 LINE_MARKERS = \n|\r|\t|\s
-DELIMITERS = ";" | "[" | "]" | "(" | ")" | "'" |"{" | "}" | ":" | "," |"."|"`" | "\"" | "$" | "\\"
+INDEX_DELIMITERS = "[" | "]" | "(" | ")"
+DELIMITERS = ";" | "'" |"{" | "}" | ":" | "," |"."|"`" | "\"" | "$" | "\\"
 LINE_COMMENTS =  "//"
 BLOCK_COMMENTS = \/\*{CHARS_GENERAL}\*\/
-COMMENTS = {BLOCK_COMMENTS}
+COMMENTS = {LINE_COMMENTS}
 
 /*OPERATORS*/
 ARITHMETIC_OPERATOR = "+" | "-" | "*" | "/" | "%" | "++" | "--"
@@ -69,6 +70,8 @@ SIMPLE_TYPES = {BASIC_TYPES} | {BASIC_TYPES_TITLE}
 {NUMBER_LITERAL} {return createToken("LITERAL", yytext());}
 {CHAR_LITERAL} {return createToken("LITERAL", yytext());}
 {DELIMITERS} { return createToken("DELIMITER", "\""+ yytext() + "\"");}
+{INDEX_DELIMITERS} { return createToken("INDEX_DELIMITER", "\""+ yytext() + "\"");}
+{NUMBERS_Z} {return createToken("INDEX", yytext());}
 {VALID_IDENTIFIER} {return createToken("IDENTIFIER", yytext());}
 {LINE_MARKERS} { /**/ }
 

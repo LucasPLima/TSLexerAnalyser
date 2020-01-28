@@ -9,7 +9,7 @@ for (let pet of pets) {
   console.log(pet);
 }
 
-if (people[1] == "Vitor") {
+if (people[0] == "Vitor") {
   console.log("Vitinho");
 }
 
